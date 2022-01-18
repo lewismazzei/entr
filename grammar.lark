@@ -1,24 +1,24 @@
 model: (entity_set | weak_entity_set | relationship_set)*
 
-entity_set: ?super_entity_set_modifier "ENT" identifier ?("EXTENDS" identifier) "{" ?attribute_list "}"
+entity_set: super_entity_set_modifier? "ENT" identifier ("EXTENDS" identifier)? "{" attribute_list? "}"
 
-weak_entity_set: "WEAK" "ENT" identifier "IDENTIFIED" "BY" identifier ?("EXTENDS" identifier) "{" ?attribute_list "}"
+weak_entity_set: "WEAK" "ENT" identifier "IDENTIFIED" "BY" identifier ("EXTENDS" identifier)? "{" attribute_list? "}"
 
-super_entity_set_modifier: "SUPER" "ENT" ?("TOTAL" | "PARTIAL") ?("OVERLAP" | "DISJOINT")
+super_entity_set_modifier: "SUPER" "ENT" ("TOTAL" | "PARTIAL")? ("OVERLAP" | "DISJOINT")?
 
 attribute_list: attribute (",", attribute)*
 
-attribute: ?key_constraint (attribute_type* identifier | "COMPOSITE" "MULTI" ?identifier)
+attribute: key_constraint? (attribute_type* identifier | "COMPOSITE" "MULTI" identifier?)
 
 key_constraint: "PRIMARY" | "DISCRIM"
 
 attribute_type: "COMPOSITE" | "MULTI" | "DERIVED"
 
-relationship_set: "REL" identifier "{" ?participating_entity_set_list ?("ATTRIBUTES" "{" attribute_list "}") "}"
+relationship_set: "REL" identifier "{" participating_entity_set_list? ("ATTRIBUTES" "{" attribute_list "}")? "}"
 
 participating_entity_set_list: participating_entity_set ("," participating_entity_set)*
 
-participating_entity_set: identifier ?("PARTIAL" | "TOTAL") ?("ONE" | "MANY") ?relationship_set
+participating_entity_set: identifier ("PARTIAL" | "TOTAL")? ("ONE" | "MANY")? relationship_set?
 
 identifier: IDENTIFIER
 
