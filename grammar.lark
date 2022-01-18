@@ -4,21 +4,36 @@ entity_set: super_entity_set_modifier? "ENT" name ("EXTENDS" name)? "{" attribut
 
 weak_entity_set: "WEAK" "ENT" name "IDENTIFIED" "BY" name ("EXTENDS" name)? "{" attribute_list? "}"
 
-super_entity_set_modifier: "SUPER" "ENT" ("TOTAL" | "PARTIAL")? ("OVERLAP" | "DISJOINT")?
+super_entity_set_modifier: "SUPER" "ENT" completeness_constraint? disjointness_constraint?
+
+completeness_constraint: "PARTIAL" -> partial
+                       | "TOTAL"   -> total
+
+disjointness_constraint: "OVERLAP"  -> overlapping
+                       | "DISJOINT" -> disjoint
 
 attribute_list: attribute ("," attribute)*
 
 attribute: key_constraint? (attribute_type* name | "COMPOSITE" "MULTI" name?)
 
-key_constraint: "PRIMARY" | "DISCRIM"
+key_constraint: "PRIMARY" -> primary
+              | "DISCRIM" -> discriminator
 
-attribute_type: "COMPOSITE" | "MULTI" | "DERIVED"
+attribute_type: "COMPOSITE" -> composite
+              | "MULTI"     -> multivalued
+              | "DERIVED"   -> derived
 
 relationship_set: "REL" name "{" participating_entity_set_list? ("ATTRIBUTES" "{" attribute_list "}")? "}"
 
 participating_entity_set_list: participating_entity_set ("," participating_entity_set)*
 
-participating_entity_set: name ("PARTIAL" | "TOTAL")? ("ONE" | "MANY")? relationship_set?
+participating_entity_set: name participation_constraint? cardinality_constraint? role?
+
+participation_constraint: "PARTIAL" -> partial
+                        | "TOTAL"   -> total
+
+cardinality_constraint: "ONE"  -> one
+                      | "MANY" -> many
 
 name: IDENTIFIER
 
