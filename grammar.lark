@@ -23,3 +23,6 @@ identifier: IDENTIFIER
 role: IDENTIFIER
 
 %import common.CNAME -> IDENTIFIER
+
+%import common.WS
+%ignore WS
