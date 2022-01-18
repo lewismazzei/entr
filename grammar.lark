@@ -6,7 +6,7 @@ weak_entity_set: "WEAK" "ENT" name "IDENTIFIED" "BY" name ("EXTENDS" name)? "{" 
 
 super_entity_set_modifier: "SUPER" "ENT" ("TOTAL" | "PARTIAL")? ("OVERLAP" | "DISJOINT")?
 
-attribute_list: attribute (",", attribute)*
+attribute_list: attribute ("," attribute)*
 
 attribute: key_constraint? (attribute_type* name | "COMPOSITE" "MULTI" name?)
 
