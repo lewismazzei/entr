@@ -1,3 +1,5 @@
+model: (entity_set | weak_entity_set | relationship_set)*
+
 entity_set: ?super_entity_set_modifier "ENT" identifier ?("EXTENDS" identifier) "{" ?attribute_list "}"
 
 weak_entity_set: "WEAK" "ENT" identifier "IDENTIFIED" "BY" identifier ?("EXTENDS" identifier) "{" ?attribute_list "}"
