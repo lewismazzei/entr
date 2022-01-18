@@ -20,8 +20,6 @@ participating_entity_set: identifier ?("PARTIAL" | "TOTAL") ?("ONE" | "MANY") ?r
 
 identifier: IDENTIFIER
 
-role: WORD
+role: IDENTIFIER
 
 %import common.CNAME -> IDENTIFIER
-%import common.WORD
-
