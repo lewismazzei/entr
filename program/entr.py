@@ -133,8 +133,14 @@ graph_epilogue = "}"
 
 filename = input_root.split("/")[-1]
 
+if not os.path.exists("dot"):
+    os.makedirs("dot")
+
 with open(f"dot/{filename}.dot", "w") as out:
     out.write(graph_prologue + "\n" + sets + "\n" + graph_epilogue + "\n")
+
+if not os.path.exists("png"):
+    os.makedirs("png")
 
 subprocess.call(
     ["zsh", "../scripts/mkpng", f"dot/{filename}.dot", f"png/{filename}.png"]
