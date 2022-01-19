@@ -105,8 +105,6 @@ if input_extension != ".entr":
 
 markup = open(input_filepath).read()
 parse_tree = parser.parse(markup)
-# print(parse_tree.pretty())
-# exit(0)
 
 ent_sets = []
 rel_sets = []
