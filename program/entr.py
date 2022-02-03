@@ -11,19 +11,116 @@ def entity_set(tree, weak=False):
     else:
         attribute_list = tree.children[1].children
 
-    attributes = []
-    for attribute in attribute_list:
-        if len(attribute.children) == 2:
-            attribute_name = str(attribute.children[1].children[0])
-            constraint = attribute.children[0].data
-        else:
-            attribute_name = str(attribute.children[0].children[0])
-            constraint = "none"
+    class Attribute:
+        def __init__(self, name, typ, key, inner_attributes):
+            self.name = name
+            self.typ = typ
+            self.key = key
+            self.inner_attributes = inner_attributes
 
-        attributes.append((attribute_name, constraint))
+        def __repr__(self):
+            return f"{self.name}:{self.typ}:{self.key}:{self.inner_attributes}"
+
+    attributes = []
+
+    def scrape_attribute(attribute, level):
+        typ = "simple"
+        key = "none"
+        inner_attributes = (level, [])
+
+        if attribute.children[0].data in ["primary", "discriminator"]:
+            key = attribute.children[0].data
+
+            if attribute.children[1].data in [
+                "composite",
+                "multivalued",
+                "derived",
+                "derived_multivalued",
+                "composite_multivalued",
+            ]:
+                typ = attribute.children[1].data
+        else:
+            if attribute.children[0].data in [
+                "composite",
+                "multivalued",
+                "derived",
+                "derived_multivalued",
+                "composite_multivalued",
+            ]:
+                typ = attribute.children[0].data
+
+        if "composite" in typ:
+            inner_attrs = attribute.children[2].children
+
+            name = str(attribute.children[-1 + len(inner_attrs)].children[0])
+
+            for inner_attribute in inner_attrs:
+                (
+                    inner_attribute_name,
+                    inner_attribute_typ,
+                    inner_attribute_key,
+                    inner_inner_attributes,
+                ) = scrape_attribute(inner_attribute, level + 1)
+
+                inner_attributes[1].append(
+                    Attribute(
+                        inner_attribute_name,
+                        inner_attribute_typ,
+                        inner_attribute_key,
+                        inner_inner_attributes,
+                    )
+                )
+        else:
+            name = str(attribute.children[-1].children[0])
+
+        return name, typ, key, inner_attributes
+
+    for attribute in attribute_list:
+        name, typ, key, inner_attributes = scrape_attribute(attribute, 0)
+
+        attributes.append(Attribute(name, typ, key, inner_attributes))
 
     indent = "\t" * 4
     newline = f"\n{indent}<BR/>\n{indent}"
+
+    html = []
+
+    def attribute_html(attribute, html):
+        if attribute.key == "primary":
+            underline = ("<U>", "</U>")
+        else:
+            underline = ("", "")
+
+        if attribute.key == "discriminator":
+            bold = ("<B>", "</B>")
+        else:
+            bold = ("", "")
+
+        if "multivalued" in attribute.typ:
+            curly = ("{ ", " }")
+        else:
+            curly = ("", "")
+
+        if "derived" in attribute.typ:
+            brackets = " ( )"
+        else:
+            brackets = ""
+
+        indentation = " " * 4 * attribute.inner_attributes[0]
+
+        html.append(
+            f"{indentation}{underline[0]}{bold[0]}<I>{curly[0]}{attribute.name}{brackets}{curly[1]}</I>{bold[1]}{underline[1]}"
+        )
+
+        if attribute.inner_attributes[1] != []:
+            for inner_attribute in attribute.inner_attributes[1]:
+                attribute_html(inner_attribute, html)
+
+    def attribute_list():
+        for attribute in attributes:
+            attribute_html(attribute, html)
+
+        return newline.join(html)
 
     return f"""
     node [shape=plaintext] {entity_set_name} {'[peripheries="1" margin="0.06"]' if weak else ''}
@@ -39,7 +136,7 @@ def entity_set(tree, weak=False):
                 HEIGHT="50"
                 CELLPADDING="6"
             >
-				{newline.join([f"{'<U>' if attribute[1] == 'primary' else ''}<I>{attribute[0]}</I>{'</U>' if attribute[1] == 'primary' else ''}" for attribute in attributes])}
+				{attribute_list()}
             </TD></TR>
         </TABLE>
     >];"""
