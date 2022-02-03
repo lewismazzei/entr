@@ -14,14 +14,23 @@ disjointness_constraint: "OVERLAP"  -> overlapping
 
 attribute_list: attribute ("," attribute)*
 
-attribute: key_constraint? (attribute_type* name | "COMPOSITE" "MULTI" name?)
+attribute: key_constraint? (basic_attribute_type | derived_multivalued_attribute_type) name
+         | key_constraint? composite_multivalued_attribute_type? name?
+         | key_constraint? composite_attribute_type name "{" attribute_list? "}"
 
 key_constraint: "PRIMARY" -> primary
               | "DISCRIM" -> discriminator
 
-attribute_type: "COMPOSITE" -> composite
-              | "MULTI"     -> multivalued
-              | "DERIVED"   -> derived
+basic_attribute_type: "MULTI"     -> multivalued
+                    | "DERIVED"   -> derived
+
+composite_attribute_type: "COMPOSITE" -> composite
+
+composite_multivalued_attribute_type: "COMPOSITE" "MULTI" -> composite_multivalued
+                                    | "MULTI" "COMPOSITE" -> composite_multivalued
+
+derived_multivalued_attribute_type: "MULTI" "DERIVED" -> derived_multivalued
+                                  | "DERIVED" "MULTI" -> derived_multivalued
 
 relationship_set: "REL" name "{" participating_entity_set_list? ("ATTRIBUTES" "{" attribute_list "}")? "}"
 
@@ -35,7 +44,9 @@ participation_constraint: "PARTIAL" -> partial
 cardinality_constraint: "ONE"  -> one
                       | "MANY" -> many
 
-name: IDENTIFIER
+// credit: https://stackoverflow.com/a/56100287
+// any valid identifier bar keywords
+name: /(?!(COMPOSITE|MULTI|DERIVED)\b)[a-z_][a-z0-9_]*/i
 
 role: IDENTIFIER
 
