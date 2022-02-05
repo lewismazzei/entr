@@ -24,54 +24,60 @@ def entity_set(tree, weak=False):
     attributes = []
 
     def scrape_attribute(attribute, level):
+        name = ""
         typ = "simple"
         key = "none"
         inner_attributes = (level, [])
 
-        if attribute.children[0].data in ["primary", "discriminator"]:
-            key = attribute.children[0].data
+        if attribute.children != []:
 
-            if attribute.children[1].data in [
-                "composite",
-                "multivalued",
-                "derived",
-                "derived_multivalued",
-                "composite_multivalued",
-            ]:
-                typ = attribute.children[1].data
-        else:
             if attribute.children[0].data in [
-                "composite",
-                "multivalued",
-                "derived",
-                "derived_multivalued",
-                "composite_multivalued",
+                "primary",
+                "discriminator",
             ]:
-                typ = attribute.children[0].data
+                key = attribute.children[0].data
 
-        if "composite" in typ:
-            inner_attrs = attribute.children[2].children
+                if attribute.children[1].data in [
+                    "composite",
+                    "multivalued",
+                    "derived",
+                    "derived_multivalued",
+                    "composite_multivalued",
+                ]:
+                    typ = attribute.children[1].data
+            else:
+                if attribute.children[0].data in [
+                    "composite",
+                    "multivalued",
+                    "derived",
+                    "derived_multivalued",
+                    "composite_multivalued",
+                ]:
+                    typ = attribute.children[0].data
 
-            name = str(attribute.children[-1 + len(inner_attrs)].children[0])
+            if "composite" in typ:
+                inner_attrs = attribute.children[2].children
 
-            for inner_attribute in inner_attrs:
-                (
-                    inner_attribute_name,
-                    inner_attribute_typ,
-                    inner_attribute_key,
-                    inner_inner_attributes,
-                ) = scrape_attribute(inner_attribute, level + 1)
+                name = str(attribute.children[-1 + len(inner_attrs)].children[0])
 
-                inner_attributes[1].append(
-                    Attribute(
+                for inner_attribute in inner_attrs:
+                    (
                         inner_attribute_name,
                         inner_attribute_typ,
                         inner_attribute_key,
                         inner_inner_attributes,
+                    ) = scrape_attribute(inner_attribute, level + 1)
+
+                    inner_attributes[1].append(
+                        Attribute(
+                            inner_attribute_name,
+                            inner_attribute_typ,
+                            inner_attribute_key,
+                            inner_inner_attributes,
+                        )
                     )
-                )
-        else:
-            name = str(attribute.children[-1].children[0])
+            else:
+                name = str(attribute.children[-1].children[0])
 
         return name, typ, key, inner_attributes
 
@@ -86,6 +92,11 @@ def entity_set(tree, weak=False):
     html = []
 
     def attribute_html(attribute, html):
+        if attribute.name != "":
+            italics = ("<I>", "</I>")
+        else:
+            italics = ("", "")
+
         if attribute.key == "primary":
             underline = ("<U>", "</U>")
         else:
@@ -109,7 +120,7 @@ def entity_set(tree, weak=False):
         indentation = " " * 4 * attribute.inner_attributes[0]
 
         html.append(
-            f"{indentation}{underline[0]}{bold[0]}<I>{curly[0]}{attribute.name}{brackets}{curly[1]}</I>{bold[1]}{underline[1]}"
+            f"{indentation}{underline[0]}{bold[0]}{italics[0]}{curly[0]}{attribute.name}{brackets}{curly[1]}{italics[1]}{bold[1]}{underline[1]}"
         )
 
         if attribute.inner_attributes[1] != []:
