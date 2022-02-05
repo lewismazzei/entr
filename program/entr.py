@@ -181,11 +181,46 @@ def relationship_set(tree):
             ParticipatingEntitySet(name, participation, cardinality, role)
         )
 
-    return f"""
-    node [shape=diamond] {relationship_set_name} [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"{' peripheries="2"' if weak else ''}];
+    peripheries = ' peripheries="2"' if weak else ""
 
-    {participating_entity_sets[0].name}{":port" if not weak else ""} -> {relationship_set_name} [minlen="2" headport="c" dir="{'back' if participating_entity_sets[0].cardinality == 'one' else 'none'}"{' color="black:invis:black"' if participating_entity_sets[0].participation == 'total' else ""}{' arrowhead="vee"' if participating_entity_sets[0].cardinality == 'one' else ''}{' color="black:invis:black"' if participating_entity_sets[0].participation == 'total' else ''}{' headclip="false"' if not weak else ''}];
-    {relationship_set_name} -> {participating_entity_sets[1].name}{":port" if not weak else ""} [minlen="2" dir="{'front' if participating_entity_sets[1].cardinality == 'one' else 'none'}"{' color="black:invis:black"' if participating_entity_sets[1].participation == 'total' else ""}{' arrowhead="vee"' if participating_entity_sets[1].cardinality == 'one' else ''}];"""
+    def participating_entity_set_list():
+        port = "" if weak else ":port"
+
+        headclip = ' headclip="false"' if weak else ""
+
+        html = []
+        for i in range(len(participating_entity_sets) - 1):
+            dir = (
+                ' dir="back"'
+                if participating_entity_sets[i].cardinality == "one"
+                else ' dir="none"'
+            )
+            color = (
+                ' color="black:invis:black"'
+                if participating_entity_sets[i].participation == "total"
+                else ""
+            )
+
+            html.append(
+                f'{participating_entity_sets[i].name}{port} -> {relationship_set_name} [minlen="2" arrowtail="vee"{dir}{color}{headclip}];'
+            )
+
+        dir = (
+            ' dir="front"'
+            if participating_entity_sets[i].cardinality == "one"
+            else ' dir="none"'
+        )
+
+        html.append(
+            f'{relationship_set_name} -> {participating_entity_sets[-1].name}{port} [minlen="2" arrowhead="vee"{dir}{color}{headclip}];'
+        )
+
+        return "\n    ".join(html)
+
+    return f"""
+    node [shape=diamond] {relationship_set_name} [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"{peripheries}];
+
+    {participating_entity_set_list()}"""
 
 
 parser = Lark(
