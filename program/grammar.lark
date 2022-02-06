@@ -1,16 +1,22 @@
-model: (entity_set | weak_entity_set | relationship_set)*
+model: (entity_set | weak_entity_set | super_entity_set | relationship_set)*
 
-entity_set: super_entity_set_modifier? "ENT" name ("EXTENDS" name)? "{" attribute_list? "}"
+entity_set: "ENT" entity_set_name ("EXTENDS" super_entity_set_name)? "{" attribute_list? "}"
 
-weak_entity_set: "WEAK" "ENT" name "IDENTIFIED" "BY" name ("EXTENDS" name)? "{" attribute_list? "}"
+weak_entity_set: "WEAK" "ENT" entity_set_name "IDENTIFIED" "BY" identifying_relationship_set_name ("EXTENDS" super_entity_set_name)? "{" attribute_list? "}"
 
-super_entity_set_modifier: "SUPER" "ENT" completeness_constraint? disjointness_constraint?
+super_entity_set: "SUPER" "ENT" completeness_constraint? disjointness_constraint? entity_set_name ("EXTENDS" super_entity_set_name)? "{" attribute_list? "}"
 
-completeness_constraint: "PARTIAL" -> partial
-                       | "TOTAL"   -> total
+completeness_constraint: partial | total
 
-disjointness_constraint: "OVERLAP"  -> overlapping
-                       | "DISJOINT" -> disjoint
+disjointness_constraint: overlapping | disjoint
+
+partial: "PARTIAL"
+
+total: "TOTAL"
+
+disjoint: "DISJOINT"
+
+overlapping: "OVERLAP"
 
 attribute_list: attribute ("," attribute)*
 
@@ -47,6 +53,12 @@ cardinality_constraint: "ONE"  -> one
 // credit: https://stackoverflow.com/a/56100287
 // any valid identifier bar keywords
 name: /(?!(COMPOSITE|MULTI|DERIVED)\b)[a-z_][a-z0-9_]*/i
+
+entity_set_name: /(?!(PARTIAL|TOTAL|OVERLAPPING|DISJOINT)\b)[a-z_][a-z0-9_]*/i
+
+super_entity_set_name: /(?!(PARTIAL|TOTAL|OVERLAPPING|DISJOINT)\b)[a-z_][a-z0-9_]*/i
+
+identifying_relationship_set_name: /(?!(PARTIAL|TOTAL|OVERLAPPING|DISJOINT)\b)[a-z_][a-z0-9_]*/i
 
 role: IDENTIFIER
 
