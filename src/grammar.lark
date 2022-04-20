@@ -50,8 +50,8 @@ participation_constraint: "PARTIAL" -> partial
 cardinality_constraint: "ONE"  -> one
                       | "MANY" -> many
 
-// credit: https://stackoverflow.com/a/56100287
-// any valid identifier bar keywords
+// any valid identifier bar keywords (credit: https://stackoverflow.com/a/56100287)
+
 name: /(?!(COMPOSITE|MULTI|DERIVED)\b)[a-z_][a-z0-9_]*/i
 
 entity_set_name: /(?!(PARTIAL|TOTAL|OVERLAPPING|DISJOINT)\b)[a-z_][a-z0-9_]*/i

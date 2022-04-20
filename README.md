@@ -12,7 +12,7 @@ A markup language for ER diagrams.
 
    `brew install graphviz`
 
-2. Clone the Repo
+2. Clone the Repo / Download the Repository
 
    `git clone https://github.com/lewismazzei/entr.git`
 
@@ -34,10 +34,10 @@ A markup language for ER diagrams.
 
 1. Change directory
 
-   `cd program`
+   `cd src`
 
 2. Run
 
-   `python entr.py <input_filepath>`
+   `python entr.py <entr_document_filepath> <png|jpg>`
 
-The generated `.dot` and `.png` files will be placed in the `/dot` and `/png` directories respectively.
+The generated `.dot` and `.png` / `.jpg` files will be placed in an `output/dot` and `output/png` / `output/jpg` directory respectively.

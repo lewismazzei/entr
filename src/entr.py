@@ -11,8 +11,7 @@ def ent_to_dot(tree, is_super=False):
     completeness = "partial"
     disjointness = "overlapping"
 
-    # print(tree.pretty())
-
+    # iterate through tokens
     for token in tree.children:
         match token.data:
             case "entity_set_name":
@@ -304,29 +303,50 @@ def inheritance_relationship_list():
                 arrow = f'point -> {super_entity_set_name}:port [minlen="1" dir="front" headclip="true" arrowhead="empty"{labels[-1]}];'
 
                 dot.append("\n    ".join([point, connection, arrow]))
+
     return "\n".join(dot)
 
 
+# generate parser
 parser = Lark(
     open("grammar.lark").read(),
     start=["model"],
 )
 
+# get entr document filepath
 input_filepath = sys.argv[1]
+# split filepath to check extension
 input_root, input_extension = os.path.splitext(input_filepath)
 
+# check extension is valid
 if input_extension != ".entr":
-    print("FileFormatError: Input File Must Of Type 'entr'")
+    print("FileFormatError: Input File Must Be Of Type 'entr'")
     exit(1)
 
-markup = open(input_filepath).read()
-parse_tree = parser.parse(markup)
+# check if an image format option is present
+if len(sys.argv) > 2:
+    # rewrite occurences of 'jpeg' to 'jpg', since they are equivalent
+    image_format = "jpg" if sys.argv[2] == "jpeg" else sys.argv[2]
+# else choose default
+else:
+    image_format = "png"
 
+# check image format is valid
+if image_format not in ["png", "jpg"]:
+    print("FileFormatError: Image Format Must Be Of Type 'png', 'jpg' or 'jpeg'")
+    exit(1)
+
+# read entr document
+markup = open(input_filepath).read()
+# generate abstract syntax tree
+ast = parser.parse(markup)
+
+# lists of strings that represent the sets that comprise the model
 ent_sets = []
 rel_sets = []
 iden_rel_sets = []
 
-
+# class modelling a superclass entity set
 class SuperEntitySet:
     def __init__(self, name, completeness, disjointness):
         self.name = name
@@ -338,10 +358,11 @@ class SuperEntitySet:
         return f"{self.name} ({self.completeness}, {self.disjointness}) {self.sub_entity_sets}"
 
 
-# TODO make sure that these are valid, i.e. EXTENDS and SUPER references match up
+# dictionary mapping subclass entity sets to superclass entity sets
 inheritance_relationships = {}
 
-for child in parse_tree.children:
+# walk tree in a depth-first manner, translate entr to dot, append dot strings to set lists
+for child in ast.children:
     match child.data:
         case "entity_set":
             ent_sets.append(ent_to_dot(child))
@@ -352,6 +373,7 @@ for child in parse_tree.children:
         case "relationship_set":
             rel_sets.append(rel_to_dot(child))
 
+# DOT graph attributes
 graph_prologue = """digraph ER {
     layout=dot;
     overlap=false;
@@ -359,16 +381,21 @@ graph_prologue = """digraph ER {
     outputorder="edgesfirst";
     rankdir="BT";"""
 
+# join entity and relationship sets
 sets = "\n".join(ent_sets + rel_sets)
 
+# closing brace
 graph_epilogue = "}"
 
+# get name of file
 filename = input_root.split("/")[-1]
 
-if not os.path.exists("dot"):
-    os.makedirs("dot")
+# if output directory does not exist create it
+if not os.path.exists("output/dot"):
+    os.makedirs("output/dot")
 
-with open(f"dot/{filename}.dot", "w") as out:
+# write dot strings to dot document
+with open(f"output/dot/{filename}.dot", "w") as out:
     out.write(
         graph_prologue
         + "\n"
@@ -380,9 +407,16 @@ with open(f"dot/{filename}.dot", "w") as out:
         + "\n"
     )
 
-if not os.path.exists("png"):
-    os.makedirs("png")
+# if output subdirectory does not exist creat it
+if not os.path.exists(f"output/{image_format}"):
+    os.makedirs(f"output/{image_format}")
 
+# execute layout engine on dot document just generated
 subprocess.call(
-    ["zsh", "../scripts/mkpng", f"dot/{filename}.dot", f"png/{filename}.png"]
+    [
+        "zsh",
+        f"../bin/mk{image_format}",
+        f"output/dot/{filename}.dot",
+        f"output/{image_format}/{filename}.{image_format}",
+    ]
 )

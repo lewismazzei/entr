@@ -1,0 +1,1 @@
+black --target-version py310 $1
