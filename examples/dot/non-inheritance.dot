@@ -1,0 +1,50 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+
+    node [shape=plaintext] student
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>+
+				<I>tot_cred</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] human
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>human</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>
+				<I>salary</I>
+            </TD></TR>
+        </TABLE>
+    >];
+}

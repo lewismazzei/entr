@@ -1,0 +1,95 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+    rankdir="BT";
+
+    node [shape=plaintext] teacher 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>teacher</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>year</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student2 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student2</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>year</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student3 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student3</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>year</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    point [shape="point" width="0.002" height="0.002"];
+    { student, student2, student3 } -> point [minlen="1" dir="none" tailclip="false"];
+    point -> teacher:port [minlen="1" dir="front" headclip="true" arrowhead="empty" label=< ......<I>total</I>>];
+}

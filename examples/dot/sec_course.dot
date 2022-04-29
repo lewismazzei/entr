@@ -1,0 +1,55 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+
+    node [shape=plaintext] section [peripheries="1" margin="0.06"]
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>section</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<I>sec_id</I>
+				<BR/>
+				<I>semester</I>
+				<BR/>
+				<I>year</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] course 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>course</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>course_id</I></U>
+				<BR/>
+				<I>title</I>
+				<BR/>
+				<I>credits</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=diamond] sec_course [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8" peripheries="2"];
+
+    course -> sec_course [minlen="2" headport="c" dir="back" arrowhead="vee"];
+    sec_course -> section [minlen="2" dir="none" color="black:invis:black"];
+}

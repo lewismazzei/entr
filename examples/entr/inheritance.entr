@@ -1,0 +1,19 @@
+SUPER ENT TOTAL DISJOINT teacher {
+    PRIMARY ID,
+    name
+}
+
+ENT student EXTENDS teacher {
+    PRIMARY ID,
+    year
+}
+
+ENT student2 EXTENDS teacher {
+    PRIMARY ID,
+    year
+}
+
+ENT student3 EXTENDS teacher {
+    PRIMARY ID,
+    year
+}

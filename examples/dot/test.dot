@@ -1,0 +1,61 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+
+    node [shape=plaintext] supervisor 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>supervisor</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<I>name</I>
+				<BR/>
+				    <I>first_name</I>
+				<BR/>
+				        <I>a</I>
+				<BR/>
+				        <I>b</I>
+				<BR/>
+				    <I>last_name</I>
+				<BR/>
+				<I>{ staff_id ( ) }</I>
+				<BR/>
+				<B><I>salary</I></B>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>matric_no</I></U>
+				<BR/>
+				<I>degree_program</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=diamond] supervises [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"];
+
+    supervisor:port -> supervises [minlen="2" dir="none" color="black:invis:black" color="black:invis:black" headclip="false"];
+    supervises -> student:port [minlen="2" dir="front" arrowhead="vee"];
+}

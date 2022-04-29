@@ -1,0 +1,19 @@
+ENT instructor {
+    PRIMARY ID,
+    name,
+    salary
+}
+
+ENT student {
+    PRIMARY ID,
+    name,
+    tot_cred
+}
+
+REL advisor {
+    instructor,
+    student
+    ATTRIBUTES {
+        project_id
+    }
+}

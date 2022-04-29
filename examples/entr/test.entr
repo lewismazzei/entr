@@ -1,0 +1,21 @@
+ENT supervisor {
+    COMPOSITE name {
+        COMPOSITE first_name {
+            a,
+            b
+        },
+        last_name
+    },
+    MULTI DERIVED staff_id,
+    DISCRIM salary
+}
+
+ENT student {
+    PRIMARY matric_no,
+    degree_program
+}
+
+REL supervises {
+    supervisor TOTAL,
+    student ONE
+}

@@ -1,0 +1,12 @@
+ENT student {
+    PRIMARY ID,
+    name,
+    tot_cred
+}
+
+ENT human {
+    PRIMARY ID,
+    name,
+    salary
+}
+

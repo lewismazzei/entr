@@ -1,0 +1,60 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+    rankdir="BT";
+
+    node [shape=plaintext] molly 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>molly</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<I>hair_colour</I>
+				<BR/>
+				<I>eye_colour</I>
+				<BR/>
+				<I>cuddly_toy_name</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] lewis 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>lewis</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<I>hair_colour</I>
+				<BR/>
+				<I>eye_colour</I>
+				<BR/>
+				<I>cuddly_toy_name</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=diamond] loves [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"];
+
+    lewis:port -> loves [minlen="2" arrowtail="vee" headclip="true" dir="none"];
+    loves -> molly:port [minlen="2" arrowhead="vee" headclip="true" dir="none"];
+
+
+}

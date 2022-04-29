@@ -1,0 +1,73 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+    rankdir="BT";
+
+    node [shape=plaintext] instructor
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>instructor</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>
+				<I>salary</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+                BGCOLOR="#FFFFFF"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>
+				<I>tot_cred</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=diamond] advisor [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"];
+
+    node [shape=box] advisor_attributes
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#FFFFFF" CELLPADDING="4">
+                <I>project</I>
+                <BR/>
+                <I>project_resources</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    advisor -> advisor_attributes [rank="same" tailport="e" style="dashed" dir="none" rankdir="LR"]
+
+    instructor:port -> advisor [minlen="2" arrowtail="vee" headclip="true" dir="none"];
+    advisor -> student:port [minlen="2" arrowhead="vee" headclip="true" dir="none"];
+
+
+}

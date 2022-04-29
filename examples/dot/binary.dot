@@ -1,0 +1,55 @@
+digraph ER {
+    layout=dot;
+    overlap=false;
+    splines="ortho";
+    outputorder="edgesfirst";
+
+    node [shape=plaintext] instructor 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>instructor</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>
+				<I>salary</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=plaintext] student 
+    [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" PORT="port">
+            <TR><TD BGCOLOR="#C7EAFB" CELLPADDING="4">
+                <I>student</I>
+            </TD></TR>
+            <TR><TD
+                BALIGN="LEFT"
+                ALIGN="LEFT"
+                WIDTH="80"
+                HEIGHT="50"
+                CELLPADDING="6"
+            >
+				<U><I>ID</I></U>
+				<BR/>
+				<I>name</I>
+				<BR/>
+				<I>tot_cred</I>
+            </TD></TR>
+        </TABLE>
+    >];
+
+    node [shape=diamond] proj_guide [style="filled" fillcolor="#E9F7FE" fontname="italic" height="0.8"];
+
+    instructor:port -> proj_guide [minlen="2" dir="none" headclip="false"];
+    proj_guide -> student:port [minlen="2" dir="none"];
+}

@@ -1,0 +1,31 @@
+ENT instructor {
+    PRIMARY ID,
+    name,
+    salary
+}
+
+ENT student {
+    PRIMARY ID,
+    name,
+    tot_cred
+}
+
+ENT project {
+
+}
+
+ENT parent {
+
+}
+
+ENT person {
+
+}
+
+REL proj_guide {
+    instructor,
+    project,
+    student,
+    parent,
+    person
+}
